@@ -1,5 +1,8 @@
 name: 'Send github'
-on: push
+on:
+  push:
+    paths:
+      - 'components/**'
 
 jobs:
   my-job:
