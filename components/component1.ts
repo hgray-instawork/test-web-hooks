@@ -1,1 +1,1 @@
-// Example component 3
+// Example component
