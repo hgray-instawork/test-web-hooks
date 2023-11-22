@@ -16,8 +16,8 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "user_id": ${{ github.event.pusher.name }},
-              "user_email": ${{ github.event.pusher.email }},
+              "user_id": '${{ github.event.pusher.name }}',
+              "user_email": '${{ github.event.pusher.email }}',
               "misc_data": 'something'
             }
         env:
