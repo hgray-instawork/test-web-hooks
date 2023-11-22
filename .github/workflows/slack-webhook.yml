@@ -16,8 +16,8 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "user_id": "user123",
-              "user_email": "a@b.com",
+              "user_id": user.name,
+              "user_email": user.email,
               "misc_data": "this is misc"
             }
         env:
