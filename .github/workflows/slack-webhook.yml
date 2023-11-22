@@ -17,8 +17,8 @@ jobs:
           payload: |
             {
               "user_id": 'abc123',
-              "user_email": pusher.email,
-              "misc_data": "this is misc"
+              "user_email": 'a@be.com,
+              "misc_data": ${{ toJSON(github.event) }}
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
