@@ -16,9 +16,9 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "user_id": 'abc123',
-              "user_email": 'a@be.com,
-              "misc_data": ${{ toJSON(github.event) }}
+              "user_id": github.event.pusher.name,
+              "user_email": github.event.pusher.email,
+              "misc_data": 'something'
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
