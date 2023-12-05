@@ -39,11 +39,11 @@ jobs:
         # with:
         #   since_last_remote_commit: true 
 
-      - name: List all changed files
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
+      # - name: List all changed files
+      #   run: |
+      #     for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+      #       echo "$file was changed"
+      #     done
           
       - name: Send GitHub Action trigger data to Slack workflow
         id: slack
@@ -54,7 +54,7 @@ jobs:
             {
               "user_id": "${{ github.event.pusher.name }}",
               "user_email": "${{ github.event.pusher.email }}",
-              "misc_data": "something"
+              "misc_data": ${{ steps.changed-files.outputs.all_changed_files }}
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
