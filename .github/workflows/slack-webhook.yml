@@ -5,8 +5,25 @@ on:
       - 'components/**'
 
 jobs:
-  my-job:
-    name: My Job
+  # my-job:
+  #   name: My Job
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Send GitHub Action trigger data to Slack workflow
+  #       id: slack
+  #       uses: slackapi/slack-github-action@v1.24.0
+  #       with:
+  #         # This data can be any valid JSON from a previous step in the GitHub Action
+  #         payload: |
+  #           {
+  #             "user_id": "${{ github.event.pusher.name }}",
+  #             "user_email": "${{ github.event.pusher.email }}",
+  #             "misc_data": "something"
+  #           }
+  #       env:
+  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  output-all:
+    name: Output commit
     runs-on: ubuntu-latest
     steps:
       - name: Send GitHub Action trigger data to Slack workflow
@@ -22,3 +39,19 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          
+  update-sync:
+    name: Update sync state
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send GitHub Action trigger data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "file_name": "Components",
+              "passcode":"${{ secrets.SLACK_GITHUB_WEBHOOK_PASSCODE }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GITHUB_WEBHOOK }}
