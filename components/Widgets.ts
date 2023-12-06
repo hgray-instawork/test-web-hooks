@@ -1,1 +1,1 @@
-// Example Widget
+// Example Widgets
