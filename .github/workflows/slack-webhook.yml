@@ -37,7 +37,10 @@ jobs:
         # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
         with:
           files: |
-            **.{js, jsx, ts, tsx}
+            **.js
+            **.jsx
+            **.ts
+            **.tsx
           # since_last_remote_commit: true 
 
       - name: List all changed files
