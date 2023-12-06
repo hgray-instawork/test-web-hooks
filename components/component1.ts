@@ -1,1 +1,1 @@
-// Example component more
+// Example component mores
