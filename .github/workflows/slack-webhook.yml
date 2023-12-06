@@ -36,9 +36,9 @@ jobs:
       - name: Send each changed file
         id: send-changes
         run: |
+          uses: slackapi/slack-github-action@v1.24.0
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "sending $file"
-            uses: slackapi/slack-github-action@v1.24.0
             with:
               payload: |
                 {
@@ -46,9 +46,9 @@ jobs:
                   "user_email": "${{ github.event.pusher.email }}",
                   "misc_data": "$file"
                 }
+            env:
+              SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           done
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           
   # update-sync:
   #   name: Update sync state
