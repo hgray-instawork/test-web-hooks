@@ -50,25 +50,6 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GITHUB_WEBHOOK }}
           
-  # matrix-job:
-  #   name: Run Matrix Job
-  #   runs-on: ubuntu-latest
-  #   needs: [changed-files]
-  #   strategy:
-  #     matrix: 
-  #       files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
-  #     max-parallel: 2
-  #     fail-fast: true
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Test
-  #       run: |
-  #         echo ${{ matrix.files }}
-            
-  
-      
-        
   # output-all:
   #   name: Output commit
   #   runs-on: ubuntu-latest
