@@ -44,7 +44,7 @@ jobs:
         with:
           payload: |
             {
-              "file_name": "${{ matrix.value }}",
+              "file_name": "${{ matrix.files }}",
               "passcode":"${{ secrets.SLACK_GITHUB_WEBHOOK_PASSCODE }}"
             }
         env:
@@ -67,7 +67,7 @@ jobs:
           {
             "user_id": "${{ github.event.pusher.name }}",
             "user_email": "${{ github.event.pusher.email }}",
-            "file_name": "${{ matrix }}"
+            "file_name": "${{ matrix.files }}"
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
