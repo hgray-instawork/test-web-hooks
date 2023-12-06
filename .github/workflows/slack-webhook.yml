@@ -5,6 +5,7 @@ on:
       - 'components/**'
 
 jobs:
+  # Gather all changed files into a matrix
   changed-files:
     name: Get changed files
     runs-on: ubuntu-latest
@@ -27,7 +28,8 @@ jobs:
             **.jsx
             **.ts
             **.tsx
-
+            
+  # Report each changed file in the matrix using a separate slack webhook call
   report-changes:
     name: Report changes to slack
     runs-on: ubuntu-latest
@@ -44,12 +46,15 @@ jobs:
         with:
           payload: |
             {
+              "user_id": "${{ github.event.pusher.name }}",
+              "user_email": "${{ github.event.pusher.email }}",
               "file_name": "${{ matrix.files }}",
               "passcode":"${{ secrets.SLACK_GITHUB_WEBHOOK_PASSCODE }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GITHUB_WEBHOOK }}
 
+  # Debug the data being sent
   debug:
     name: Debug logging
     runs-on: ubuntu-latest
@@ -71,21 +76,3 @@ jobs:
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          
-          
-  # update-sync:
-  #   name: Update sync state
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Send GitHub Action trigger data to Slack workflow
-  #       id: slack
-  #       uses: slackapi/slack-github-action@v1.24.0
-  #       with:
-  #         payload: |
-  #           {
-  #             "file_name": "components/Components.ts",
-  #             "passcode":"${{ secrets.SLACK_GITHUB_WEBHOOK_PASSCODE }}"
-  #           }
-  #       env:
-  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GITHUB_WEBHOOK }}
-          
