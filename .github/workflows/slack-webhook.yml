@@ -38,8 +38,14 @@ jobs:
         with:
           files: |
             **.{js, jsx, ts, tsx}
-          since_last_remote_commit: true 
-        
+          # since_last_remote_commit: true 
+
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+          
       # - name: send changes
       #   id: send-changes
       #   # uses: slackapi/slack-github-action@v1.24.0
@@ -59,32 +65,32 @@ jobs:
       #   # env:
       #   #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           
-      - name: Send GitHub Action trigger data to Slack workflow
-        id: slack
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          # This data can be any valid JSON from a previous step in the GitHub Action
-          payload: |
-            {
-              "user_id": "${{ github.event.pusher.name }}",
-              "user_email": "${{ github.event.pusher.email }}",
-              "misc_data": "${{ steps.changed-files.outputs.all_changed_files }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      # - name: Send GitHub Action trigger data to Slack workflow
+      #   id: slack
+      #   uses: slackapi/slack-github-action@v1.24.0
+      #   with:
+      #     # This data can be any valid JSON from a previous step in the GitHub Action
+      #     payload: |
+      #       {
+      #         "user_id": "${{ github.event.pusher.name }}",
+      #         "user_email": "${{ github.event.pusher.email }}",
+      #         "misc_data": "${{ steps.changed-files.outputs.all_changed_files }}"
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           
-  update-sync:
-    name: Update sync state
-    runs-on: ubuntu-latest
-    steps:
-      - name: Send GitHub Action trigger data to Slack workflow
-        id: slack
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          payload: |
-            {
-              "file_name": "Components",
-              "passcode":"${{ secrets.SLACK_GITHUB_WEBHOOK_PASSCODE }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GITHUB_WEBHOOK }}
+  # update-sync:
+  #   name: Update sync state
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Send GitHub Action trigger data to Slack workflow
+  #       id: slack
+  #       uses: slackapi/slack-github-action@v1.24.0
+  #       with:
+  #         payload: |
+  #           {
+  #             "file_name": "Components",
+  #             "passcode":"${{ secrets.SLACK_GITHUB_WEBHOOK_PASSCODE }}"
+  #           }
+  #       env:
+  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GITHUB_WEBHOOK }}
