@@ -5,23 +5,6 @@ on:
       - 'components/**'
 
 jobs:
-  # my-job:
-  #   name: My Job
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Send GitHub Action trigger data to Slack workflow
-  #       id: slack
-  #       uses: slackapi/slack-github-action@v1.24.0
-  #       with:
-  #         # This data can be any valid JSON from a previous step in the GitHub Action
-  #         payload: |
-  #           {
-  #             "user_id": "${{ github.event.pusher.name }}",
-  #             "user_email": "${{ github.event.pusher.email }}",
-  #             "misc_data": "something"
-  #           }
-  #       env:
-  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   output-all:
     name: Output commit
     runs-on: ubuntu-latest
@@ -43,44 +26,29 @@ jobs:
             **.tsx
           # since_last_remote_commit: true 
 
-      - name: List all changed files
+      - name: Echo all changed files
+        id: echo-changes
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
-          
-      # - name: send changes
-      #   id: send-changes
-      #   # uses: slackapi/slack-github-action@v1.24.0
-      #   run: |
-      #     for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-      #       uses: slackapi/slack-github-action@v1.24.0
-      #       with:
-      #         payload: |
-      #           {
-      #             "user_id": "${{ github.event.pusher.name }}",
-      #             "user_email": "${{ github.event.pusher.email }}",
-      #             "misc_data": "$file"
-      #           }
-      #       env:
-      #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     done
-      #   # env:
-      #   #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          
-      # - name: Send GitHub Action trigger data to Slack workflow
-      #   id: slack
-      #   uses: slackapi/slack-github-action@v1.24.0
-      #   with:
-      #     # This data can be any valid JSON from a previous step in the GitHub Action
-      #     payload: |
-      #       {
-      #         "user_id": "${{ github.event.pusher.name }}",
-      #         "user_email": "${{ github.event.pusher.email }}",
-      #         "misc_data": "${{ steps.changed-files.outputs.all_changed_files }}"
-      #       }
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Send each changed file
+        id: send-changes
+        run: |
+          uses: slackapi/slack-github-action@v1.24.0
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "sending $file"
+            with:
+              payload: |
+                {
+                  "user_id": "${{ github.event.pusher.name }}",
+                  "user_email": "${{ github.event.pusher.email }}",
+                  "misc_data": "$file"
+                }
+          done
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           
   # update-sync:
   #   name: Update sync state
