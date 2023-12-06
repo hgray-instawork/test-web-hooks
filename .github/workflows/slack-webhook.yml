@@ -30,7 +30,7 @@ jobs:
       # - name: Echo all changed files
       #   id: echo-changes
       #   run: |
-      #     for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+      #     for file in ${{ steps.get-changed-files.outputs.all_changed_files }}; do
       #       echo "$file was changed"
       #     done
           
@@ -38,7 +38,7 @@ jobs:
       # - name: Send each changed file
       #   id: send-changes
       #   run: |
-      #     for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+      #     for file in ${{ steps.get-changed-files.outputs.all_changed_files }}; do
       #       echo "sending $file"
       #       uses: slackapi/slack-github-action@v1.24.0
       #       with:
@@ -61,7 +61,7 @@ jobs:
             {
               "user_id": "${{ github.event.pusher.name }}",
               "user_email": "${{ github.event.pusher.email }}",
-              "file_name": "${{ steps.changed-files.outputs.all_changed_files }}"
+              "file_name": "${{ steps.get-changed-files.outputs.all_changed_files }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -76,7 +76,7 @@ jobs:
         with:
           payload: |
             {
-              "file_name": "Components",
+              "file_name": "components/Components.ts",
               "passcode":"${{ secrets.SLACK_GITHUB_WEBHOOK_PASSCODE }}"
             }
         env:
