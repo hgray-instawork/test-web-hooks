@@ -30,7 +30,7 @@ jobs:
       - name: Build matrix
         id: matrix
         run: |
-          echo "value=${{ steps.get-changed-files-list.outputs.all_changed_files }}" >> $GITHUB_OUTPUT
+          echo "value=${{ \"steps.get-changed-files-list.outputs.all_changed_files\" }}" >> $GITHUB_OUTPUT
 
   report-changes:
     name: Report changes
