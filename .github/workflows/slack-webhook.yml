@@ -30,7 +30,7 @@ jobs:
         id: list-changes
         run: |
           for file in ${{ steps.get-changed-files.outputs.all_changed_files }}; do
-            run: echo CHANGED_FILE=$file
+            run: echo "CHANGED_FILE=$file"
           done
 
       - name: Put each file
