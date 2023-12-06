@@ -15,7 +15,7 @@ jobs:
 
       # Get all changed files
       - name: Get changed files
-        id: changed-files
+        id: get-changed-files
         uses: tj-actions/changed-files@v40
         # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
         with:
@@ -24,32 +24,42 @@ jobs:
             **.jsx
             **.ts
             **.tsx
-          # since_last_remote_commit: true 
-
+          # since_last_remote_commit: true
+          
       - name: Echo all changed files
-        id: echo-changes
+        id: list-changes
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
+          for file in ${{ steps.get-changed-files.outputs.all_changed_files }}; do
+            run: echo CHANGED_FILE=$file
           done
 
-      - name: Send each changed file
-        id: send-changes
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "sending $file"
-            echo "sending truncated ${{ sed -i 's/components//g' $file}}"
-            uses: slackapi/slack-github-action@v1.24.0
-            with:
-              payload: |
-                {
-                  "user_id": "${{ github.event.pusher.name }}",
-                  "user_email": "${{ github.event.pusher.email }}",
-                  "misc_data": "$file"
-                }
-            env:
-              SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          done
+      - name: Put each file
+        id: echo-changes
+        run: echo "$CHANGED_FILE was changed"
+          
+      # - name: Echo all changed files
+      #   id: echo-changes
+      #   run: |
+      #     for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+      #       echo "$file was changed"
+      #     done
+
+      # - name: Send each changed file
+      #   id: send-changes
+      #   run: |
+      #     for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+      #       echo "sending $file"
+      #       uses: slackapi/slack-github-action@v1.24.0
+      #       with:
+      #         payload: |
+      #           {
+      #             "user_id": "${{ github.event.pusher.name }}",
+      #             "user_email": "${{ github.event.pusher.email }}",
+      #             "misc_data": "$file"
+      #           }
+      #       env:
+      #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     done
           
   # update-sync:
   #   name: Update sync state
