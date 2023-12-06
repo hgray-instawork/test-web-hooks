@@ -25,6 +25,7 @@ jobs:
             **.ts
             **.tsx
           # since_last_remote_commit: true
+          separator: ","
 
       - name: Build matrix
         id: matrix
@@ -37,8 +38,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # value: ${{fromJSON(needs.collect-changed-files.outputs.matrix)}}
-        value: ${{ needs.collect-changed-files.outputs.matrix }}
+        value: ${{fromJSON(needs.collect-changed-files.outputs.matrix)}}
+        # value: ${{ needs.collect-changed-files.outputs.matrix }}
     steps:
       - run: |
           echo "${{ matrix.value }}"
