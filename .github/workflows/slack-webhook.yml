@@ -28,8 +28,8 @@ jobs:
             **.ts
             **.tsx
 
-  matrix-job:
-    name: Run Matrix Job
+  report-changes:
+    name: Report changes to slack
     runs-on: ubuntu-latest
     needs: [changed-files]
     strategy:
@@ -38,50 +38,35 @@ jobs:
       max-parallel: 2
       fail-fast: true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Test
-        run: |
-          echo ${{ matrix.files }}
-            
-  # collect-changed-files:
-  #   name: Capture changed files
+      - name: Send GitHub Action trigger data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "file_name": "${{ matrix.value }}",
+              "passcode":"${{ secrets.SLACK_GITHUB_WEBHOOK_PASSCODE }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GITHUB_WEBHOOK }}
+          
+  # matrix-job:
+  #   name: Run Matrix Job
   #   runs-on: ubuntu-latest
-  #   outputs:
-  #     matrix: ${{ steps.matrix.outputs.value }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
-
-  #     - name: Get change list
-  #       id: get-changed-files-list
-  #       uses: tj-actions/changed-files@v40
-  #       with:
-  #         files: |
-  #           **.js
-  #           **.jsx
-  #           **.ts
-  #           **.tsx
-  #         # since_last_remote_commit: true
-  #         separator: ","
-
-  #     - name: Build matrix
-  #       id: matrix
-  #       run: |
-  #         echo "value=${{ steps.get-changed-files-list.outputs.all_changed_files }}" >> $GITHUB_OUTPUT
-
-  # report-changes:
-  #   name: Report changes
-  #   needs: [ collect-changed-files ]
-  #   runs-on: ubuntu-latest
+  #   needs: [changed-files]
   #   strategy:
-  #     matrix:
-  #       value: ${{fromJSON(needs.collect-changed-files.outputs.matrix)}}
-  #       # value: ${{ needs.collect-changed-files.outputs.matrix }}
+  #     matrix: 
+  #       files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
+  #     max-parallel: 2
+  #     fail-fast: true
   #   steps:
-  #     - run: |
-  #         echo "${{ matrix.value }}"
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Test
+  #       run: |
+  #         echo ${{ matrix.files }}
+            
+  
       
         
   # output-all:
@@ -105,13 +90,7 @@ jobs:
   #           **.tsx
   #         # since_last_remote_commit: true
 
-  #     # # Debug output
-  #     # - name: Echo all changed files
-  #     #   id: echo-changes
-  #     #   run: |
-  #     #     for file in ${{ steps.get-changed-files.outputs.all_changed_files }}; do
-  #     #       echo "$file was changed"
-  #     #     done
+
           
   #     # # Send updates
   #     # - name: Send each changed file
@@ -161,21 +140,3 @@ jobs:
   #       env:
   #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GITHUB_WEBHOOK }}
           
-  # setup:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     matrix: ${{ steps.matrix.outputs.value }}
-  #   steps:
-  #     - id: matrix
-  #       run: |
-  #         # echo '::set-output name=value::[\"a\", \"b\", \"c\"]'
-  #         echo "value=[\"a\", \"b\", \"c\"]" >> $GITHUB_OUTPUT
-  # build:
-  #   needs: [ setup ]
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       value: ${{fromJSON(needs.setup.outputs.matrix)}}
-  #   steps:
-  #     - run: |
-  #         echo "${{ matrix.value }}"
