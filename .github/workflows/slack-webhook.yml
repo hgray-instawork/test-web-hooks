@@ -38,7 +38,7 @@ jobs:
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "sending $file"
-            echo "sending truncated sed -i 's/components//g' $file"
+            echo "sending truncated ${{ sed -i 's/components//g' $file}}"
             uses: slackapi/slack-github-action@v1.24.0
             with:
               payload: |
