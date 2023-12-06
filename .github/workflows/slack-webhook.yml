@@ -61,7 +61,7 @@ jobs:
             {
               "user_id": "${{ github.event.pusher.name }}",
               "user_email": "${{ github.event.pusher.email }}",
-              "misc_data": "${{ steps.changed-files.outputs.all_changed_files }}"
+              "file_name": "${{ steps.changed-files.outputs.all_changed_files }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
