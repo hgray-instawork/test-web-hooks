@@ -46,6 +46,7 @@ jobs:
         with:
           payload: |
             {
+              "event_type": "PUSH",
               "user_id": "${{ github.event.pusher.name }}",
               "user_email": "${{ github.event.pusher.email }}",
               "file_name": "${{ matrix.files }}",
