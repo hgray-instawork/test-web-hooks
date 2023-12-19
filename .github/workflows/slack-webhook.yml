@@ -80,7 +80,7 @@ jobs:
               "event_type": "PUSH",
               "user_id": "${{ github.event.pusher.name }}",
               "user_email": "${{ github.event.pusher.email }}",
-              "passcode":"${{ secrets.SERVERLESS_GITHUB_PASSCODE }}"
+              "passcode":"${{ secrets.SERVERLESS_GITHUB_PASSCODE }}",
               "timestamp":"${{ steps.date.outputs.date }}",
               "files": "${{ matrix.files }}"
             }
