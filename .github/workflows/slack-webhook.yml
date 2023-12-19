@@ -60,15 +60,12 @@ jobs:
     name: Report changes to serverless
     runs-on: ubuntu-latest
     needs: [changed-files]
-    strategy:
-      matrix: 
-        files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
-      max-parallel: 2
-      fail-fast: true
+    # strategy:
+    #   matrix: 
+    #     files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
+    #   max-parallel: 2
+    #   fail-fast: true
     steps:
-      # - name: Get current date
-      #   id: date
-      #   run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
       - name: Send Github action to serverless github-monitor
         id: serverless
         uses: fjogeleit/http-request-action@v1
@@ -81,9 +78,9 @@ jobs:
               "user_id": "${{ github.event.pusher.name }}",
               "user_email": "${{ github.event.pusher.email }}",
               "passcode":"${{ secrets.SERVERLESS_GITHUB_PASSCODE }}",
-              # "timestamp":"${{ steps.date.outputs.date }}",
               "timestamp":"${{ github.event.repository.updated_at}}",
-              "files": "${{ matrix.files }}"
+              "files":${{ needs.changed-files.outputs }}
+              # "files": "${{ matrix.files }}"
             }
 
   # # Debug the data being sent
