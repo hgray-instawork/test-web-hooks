@@ -30,7 +30,7 @@ jobs:
             **.tsx
             
   # Report each changed file in the matrix using a separate slack webhook call
-  report-changes:
+  report-slack:
     name: Report changes to slack
     runs-on: ubuntu-latest
     needs: [changed-files]
@@ -54,6 +54,32 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GITHUB_WEBHOOK }}
+        
+  # Report all changed files in the matrix to a serverless Lambda
+  report-serverless:
+    name: Report changes to serverless
+    runs-on: ubuntu-latest
+    needs: [changed-files]
+    strategy:
+      matrix: 
+        files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
+      max-parallel: 2
+      fail-fast: true
+    steps:
+      - name: Send Github action to serverless github-monitor
+        id: serverless
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "${{ secrets.SERVERLESS_GITHUB_URL }}"
+          method: 'POST'
+          data: |
+            {
+              "event_type": "PUSH",
+              "user_id": "${{ github.event.pusher.name }}",
+              "user_email": "${{ github.event.pusher.email }}",
+              "file_name": "${{ matrix.files }}",
+              "passcode":"${{ secrets.SERVERLESS_GITHUB_PASSCODE }}"
+            }
 
   # Debug the data being sent
   debug:
