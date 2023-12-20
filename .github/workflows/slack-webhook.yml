@@ -64,6 +64,7 @@ jobs:
     #   matrix: 
     #     files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
     #   max-parallel: 2
+    #   # "files": "${{ matrix.files }}"
     #   fail-fast: true
     steps:
       - name: Send Github action to serverless github-monitor
@@ -80,7 +81,6 @@ jobs:
               "passcode":"${{ secrets.SERVERLESS_GITHUB_PASSCODE }}",
               "timestamp":"${{ github.event.repository.updated_at}}",
               "files":${{ needs.changed-files.outputs.matrix }}
-              # "files": "${{ matrix.files }}"
             }
 
   # # Debug the data being sent
