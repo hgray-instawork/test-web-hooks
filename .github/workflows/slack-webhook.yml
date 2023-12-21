@@ -81,7 +81,7 @@ jobs:
               "passcode":"${{ secrets.SERVERLESS_GITHUB_PASSCODE }}",
               "timestamp":"${{ github.event.repository.updated_at}}",
               "files":${{ needs.changed-files.outputs.matrix }},
-              "description":${{ GITHUB_SHA }}
+              "description":"${{ GITHUB_SHA }}"
             }
 
   # # Debug the data being sent
