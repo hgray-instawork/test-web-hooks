@@ -1,1 +1,1 @@
-// Example Module 1b
+// Example Module 1
