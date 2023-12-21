@@ -79,14 +79,14 @@ jobs:
               "user_id": "${{ github.event.pusher.name }}",
               "user_email": "${{ github.event.pusher.email }}",
               "passcode": "${{ secrets.SERVERLESS_GITHUB_PASSCODE }}",
-              "timestamp": "${{ github.event.repository.updated_at}}",
+              "timestamp": "${{ github.event.head_commit.timestamp}}",
               "files": ${{ needs.changed-files.outputs.matrix }},
               "description": "${{ github.sha }}"
             }
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
+      # - name: Dump GitHub context
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJSON(github) }}
+      #   run: echo "$GITHUB_CONTEXT"
 
   # # Debug the data being sent
   # debug:
