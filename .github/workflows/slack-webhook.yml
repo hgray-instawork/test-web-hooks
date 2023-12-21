@@ -83,6 +83,10 @@ jobs:
               "files": ${{ needs.changed-files.outputs.matrix }},
               "description": "${{ github.sha }}"
             }
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
   # # Debug the data being sent
   # debug:
