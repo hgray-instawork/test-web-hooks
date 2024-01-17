@@ -1,0 +1,75 @@
+# IWDS Component Monitor
+# Monitors changes to specific files/folders and dispatches the information to
+#   a serverless function
+# set repo secrets:
+#   - SERVERLESS_GITHUB_URL: the url to the serverless GitHub receiver function
+#   - SERVERLESS_GITHUB_PASSCODE: the passcode used to authenticate incoming requests
+# setup
+#   - The trigger 'branches' must match the main/master naming. Update if 'master' is used instead of 'main'
+#   - The trigger 'paths' must match the expected location of the components to monitor
+#   - The 'path' value within the "Get changed files" step should match the trigger 'paths'
+
+name: 'Test trigger'
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'components/**'
+
+jobs:
+  # Gather all changed files into a matrix
+  changed-files:
+    name: Get changed files
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changed-files.outputs.all_changed_files }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          json: true
+          quotepath: false
+          escape_json: false
+          path: 'components/**'
+          files: |
+            **.js
+            **.jsx
+            **.ts
+            **.tsx
+      - name: List all changed files
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          for file in "$ALL_CHANGED_FILES"; do
+            echo "$file was changed"
+          done
+        
+  # # Report all changed files in the matrix to a serverless Lambda
+  # report-serverless:
+  #   name: Report changes to serverless
+  #   runs-on: ubuntu-latest
+  #   needs: [changed-files]
+  #   steps:
+  #     - name: Send Github action to serverless github-monitor
+  #       id: serverless
+  #       uses: fjogeleit/http-request-action@v1
+  #       with:
+  #         url: "${{ secrets.SERVERLESS_GITHUB_URL }}"
+  #         method: 'POST'
+  #         data: |
+  #           {
+  #             "event_type": "PUSH",
+  #             "user_id": "${{ github.event.pusher.name }}",
+  #             "user_email": "${{ github.event.pusher.email }}",
+  #             "passcode": "${{ secrets.SERVERLESS_GITHUB_PASSCODE }}",
+  #             "timestamp": "${{ github.event.head_commit.timestamp}}",
+  #             "files": ${{ needs.changed-files.outputs.matrix }},
+  #             "description": "${{ github.sha }}"
+  #           }
+
