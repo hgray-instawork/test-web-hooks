@@ -13,8 +13,10 @@ name: 'Test trigger'
 on:
   push:
     branches:
+      # set this to the name of the primary branch: 'main' or 'master'
       - 'main'
     paths:
+      # set this to the directory which contains the IWDS components
       - 'components/**'
 
 jobs:
@@ -31,12 +33,13 @@ jobs:
           fetch-depth: 0
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v41
         with:
           json: true
           quotepath: false
           escape_json: false
-          path: 'components/**'
+          # set this to the directory which contains the IWDS components
+          path: 'components/'
           files: |
             **.js
             **.jsx
