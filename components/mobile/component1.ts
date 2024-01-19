@@ -1,1 +1,1 @@
-// Example component 1 changed2
+// Example component 1 changed
