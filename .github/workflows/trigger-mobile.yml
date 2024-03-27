@@ -43,15 +43,12 @@ jobs:
       - name: List all changed files
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          JSON_CHANGED_FILES: toJson(${{ steps.changed-files.outputs.all_changed_files }})
+          FILE_ARRAY: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
         run: |
           echo "All files: $ALL_CHANGED_FILES"
-          # echo "Step output: $steps.changed-files.outputs.all_changed_files"
           for file in "$ALL_CHANGED_FILES"; do
             echo "$file was changed"
-          # for cfile in "$steps.changed-files.outputs.all_changed_files"
-          #   echo "$cfile wuz chng"
-          echo "JSON F: $JSON_CHANGED_FILES"
-          for jfile in "$JSON_CHANGED_FILES"; do
-            echo "jfile: $jfile"
+          echo "Array: $FILE_ARRAY"
+          for ff in "$FILE_ARRAY"; do
+            echo "fff: $ff"
           done
