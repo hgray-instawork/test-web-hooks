@@ -1,0 +1,49 @@
+# IWDS Mobile Component Monitor
+# Monitors changes to specific files/folders and dispatches the information to
+#   a serverless function
+# See !! comments below for setup
+
+name: 'IWDS Mobile Component Monitor'
+on:
+  push:
+    branches:
+      # !! set to the name of the primary branch: 'main' or 'master'
+      - 'main'
+    paths:
+      # !! set to the directory which contains the IWDS components
+      - 'components/mobile/**'
+
+jobs:
+  # Gather all changed files into a matrix
+  changed-files:
+    name: Get changed files
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changed-files.outputs.all_changed_files }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v41
+        with:
+          json: true
+          quotepath: false
+          escape_json: false
+          dir_names: "true"
+          # !! set path to the directory which contains the IWDS components
+          path: 'components/mobile/'
+          files: |
+            **.js
+            **.jsx
+            **.ts
+            **.tsx
+      - name: List all changed files
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          for file in "$ALL_CHANGED_FILES"; do
+            echo "$file was changed"
+          done
