@@ -43,12 +43,16 @@ jobs:
       - name: List all changed files
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          JSON_CHANGED_FILES: toJson(steps.changed-files.outputs.all_changed_files)
         run: |
           echo "All files: $ALL_CHANGED_FILES"
-          echo "Step output: $steps.changed-files.outputs.all_changed_files"
+          # echo "Step output: $steps.changed-files.outputs.all_changed_files"
           # for file in "$ALL_CHANGED_FILES"; do
           for file in "$ALL_CHANGED_FILES[@]"; do
             echo "$file was changed"
-          for cfile in "$steps.changed-files.outputs.all_changed_files"
-            echo "$cfile wuz chng"
+          # for cfile in "$steps.changed-files.outputs.all_changed_files"
+          #   echo "$cfile wuz chng"
+          echo "JSON F: $JSON_CHANGED_FILES"
+          for jfile in "$JSON_CHANGED_FILES"; do
+            echo "jfile: $jfile"
           done
