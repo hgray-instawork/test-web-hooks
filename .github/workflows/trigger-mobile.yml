@@ -19,7 +19,7 @@ jobs:
     name: Get changed files
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.changed-files.outputs.all_changed_files }}
+      matrix: ${{ toJson(contains(fromJson(steps.changed-files.outputs.all_changed_files), '/')) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
             **.tsx
       - name: List all changed files
         env:
-          ALL_CHANGED_FILES: ${{ contains(steps.changed-files.outputs.all_changed_files, '/') }}
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
           for file in "$ALL_CHANGED_FILES"; do
             echo "$file was changed"
