@@ -43,7 +43,7 @@ jobs:
       - name: List all changed files
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          JSON_CHANGED_FILES: toJson(steps.changed-files.outputs.all_changed_files)
+          JSON_CHANGED_FILES: toJson(${{ steps.changed-files.outputs.all_changed_files }})
         run: |
           echo "All files: $ALL_CHANGED_FILES"
           # echo "Step output: $steps.changed-files.outputs.all_changed_files"
