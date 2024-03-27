@@ -32,7 +32,7 @@ jobs:
           json: true
           quotepath: false
           escape_json: false
-          dir_names: "true"
+          dir_names: "false"
           # !! set path to the directory which contains the IWDS components
           path: 'components/mobile/'
           files: |
@@ -42,7 +42,7 @@ jobs:
             **.tsx
       - name: List all changed files
         env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          ALL_CHANGED_FILES: ${{ contains(steps.changed-files.outputs.all_changed_files, "/") }}
         run: |
           for file in "$ALL_CHANGED_FILES"; do
             echo "$file was changed"
