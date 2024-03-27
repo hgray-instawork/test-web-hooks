@@ -47,9 +47,6 @@ jobs:
           echo "All files: $ALL_CHANGED_FILES"
           for file in "$ALL_CHANGED_FILES"; do
             echo "$file was changed"
-          echo "Array: $fromJSON(ALL_CHANGED_FILES)"
-          for ff in "$fromJSON(ALL_CHANGED_FILES)"; do
-            echo "fff: $ff"
           done
   report-changes:
     name: Report changed-files
