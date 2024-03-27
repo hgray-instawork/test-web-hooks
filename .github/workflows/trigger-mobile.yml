@@ -47,8 +47,7 @@ jobs:
         run: |
           echo "All files: $ALL_CHANGED_FILES"
           # echo "Step output: $steps.changed-files.outputs.all_changed_files"
-          # for file in "$ALL_CHANGED_FILES"; do
-          for file in "$ALL_CHANGED_FILES[@]"; do
+          for file in "$ALL_CHANGED_FILES"; do
             echo "$file was changed"
           # for cfile in "$steps.changed-files.outputs.all_changed_files"
           #   echo "$cfile wuz chng"
