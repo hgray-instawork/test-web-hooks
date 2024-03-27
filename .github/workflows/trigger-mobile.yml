@@ -65,9 +65,9 @@ jobs:
     name: Report changed-files
     runs-on: ubuntu-latest
     needs: [changed-files]
-    strategy:
-      matrix: 
-        files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
+    # strategy:
+    #   matrix: 
+    #     files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
     #   max-parallel: 4
     #   fail-fast: false
     steps:
@@ -75,14 +75,18 @@ jobs:
         run: |
           # echo ${{ matrix.files }}
           # files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
-          echo "files: $files"
-          filtered=()
+          # echo "files: $files"
+          # filtered=()
           # Iterate over each element in the array
-          for item in ${{ matrix.files }}; do
+          # for item in ${{ matrix.files }}; do
           # Check if the element matches the pattern
           # if [[ contains("$item", '/') ]]; then
           # If the element matches the pattern, add it to the filtered array
-          filtered+=("$item")
+          # filtered+=("$item")
           # fi
-          echo "Filtered: $filtered"
+          # echo "Filtered: $filtered"
+          matrix_data = ${{ needs.changed-files.outputs.matrix }}
+          echo "matrix: $matrix_data"
+          for item in matrix_data; do
+            echo "got: $item"
           
