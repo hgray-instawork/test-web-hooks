@@ -75,13 +75,14 @@ jobs:
         run: |
           # echo ${{ matrix.files }}
           files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
+          echo "files: $files"
           filtered=()
           # Iterate over each element in the array
           for item in "$files"; do
           # Check if the element matches the pattern
-          if [[ contains("$item", '/') ]]; then
+          # if [[ contains("$item", '/') ]]; then
           # If the element matches the pattern, add it to the filtered array
           filtered+=("$item")
-          fi
+          # fi
           echo "Filtered: $filtered"
           
