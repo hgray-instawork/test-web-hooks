@@ -74,7 +74,8 @@ jobs:
       - name: LOG2
         env:
           MX_OUTPUT: ${{ needs.changed-files.outputs.matrix }}
+          MX_JSON: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
         run: |
           echo "MX: $MX_OUTPUT"
-          done
+          echo "JS: $MX_JSON"
           
