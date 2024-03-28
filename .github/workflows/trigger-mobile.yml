@@ -72,6 +72,9 @@ jobs:
     #   fail-fast: false
     steps:
       - name: LOG
+        env:
+          MX_OUTPUT: ${{ needs.changed-files.outputs.matrix }}
+          MX_JSON: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
         run: |
           # echo ${{ matrix.files }}
           # files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
@@ -85,8 +88,10 @@ jobs:
           # filtered+=("$item")
           # fi
           # echo "Filtered: $filtered"
-          matrix_data = ${{ needs.changed-files.outputs.matrix }}
-          echo "matrix: $matrix_data"
-          for item in matrix_data; do
-            echo "got: $item"
+          # matrix_data = ${{ needs.changed-files.outputs.matrix }}
+          # echo "matrix: $matrix_data"
+          # for item in ${{ matrix_data }}; do
+          #   echo "got: $item"
+          echo "mx: $MX_OUTPUT"
+          echo "JS: $MX_JSON"
           
