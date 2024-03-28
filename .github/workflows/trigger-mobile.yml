@@ -62,7 +62,7 @@ jobs:
   #       run: |
   #         echo ${{ matrix.files }}
   report-changes2:
-    name: Report changed-files
+    name: Report changed-files2
     runs-on: ubuntu-latest
     needs: [changed-files]
     # strategy:
@@ -71,11 +71,10 @@ jobs:
     #   max-parallel: 4
     #   fail-fast: false
     steps:
-      - name: LOG
+      - name: LOG2
         env:
           MX_OUTPUT: ${{ needs.changed-files.outputs.matrix }}
-          MX_JSON: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
         run: |
-          echo "mx: $MX_OUTPUT"
-          echo "JS: $MX_JSON"
+          echo "MX: $MX_OUTPUT"
+          done
           
