@@ -76,6 +76,6 @@ jobs:
           MX_JSON: fromJSON(${{ needs.changed-files.outputs.matrix }})
         run: |
           echo "JSX: $MX_JSON"
-          for item in ${{ MX_JSON }}; do
+          for item in ${{ $MX_JSON }}; do
             echo "ff $file"
           
